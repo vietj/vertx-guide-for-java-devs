@@ -21,12 +21,12 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import io.vertx.ext.sql.ResultSet;
 import io.vertx.rx.java.RxHelper;
 import io.vertx.rxjava.ext.jdbc.JDBCClient;
 import io.vertx.rxjava.ext.sql.SQLConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import rx.Observable;
 import rx.Single;
 
@@ -65,8 +65,8 @@ class WikiDatabaseServiceImpl implements WikiDatabaseService {
   @Override
   // tag::rx-data-flow[]
   public WikiDatabaseService fetchAllPages(Handler<AsyncResult<JsonArray>> resultHandler) {
-    getConnection()
-      .flatMap(conn -> conn.rxQuery(sqlQueries.get(SqlQuery.ALL_PAGES)))
+    dbClient
+      .rxQuery(sqlQueries.get(SqlQuery.ALL_PAGES))
       .flatMapObservable(res -> {  // <1>
         List<JsonArray> results = res.getResults();
         return Observable.from(results); // <2>
